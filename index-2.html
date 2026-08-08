@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taarof Cafe — Sopore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0808;
+    --bg-alt:#150d0e;
+    --panel:#1a1112;
+    --red:#c81d3a;
+    --red-deep:#5c0d1c;
+    --red-bright:#e63950;
+    --text:#f3ece4;
+    --text-muted:#a8968d;
+    --line: rgba(243,236,228,0.12);
+    --maxw: 1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  h1,h2,h3{font-family:'Playfair Display', serif;}
+  .eyebrow{
+    font-family:'Jost',sans-serif;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--red-bright);
+    font-weight:500;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  :focus-visible{outline:2px solid var(--red-bright); outline-offset:4px;}
+
+  /* ---------- Paisley divider signature ---------- */
+  .divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    margin:0 auto 20px;
+    width:fit-content;
+    color:var(--red);
+  }
+  .divider .line{width:64px;height:1px;background:linear-gradient(90deg, transparent, var(--red-deep));}
+  .divider .line.right{background:linear-gradient(90deg, var(--red-deep), transparent);}
+  .divider svg{width:22px;height:22px;flex-shrink:0;}
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 40px;
+    transition:background .4s ease, padding .4s ease, box-shadow .4s ease;
+  }
+  header.scrolled{
+    background:rgba(10,8,8,0.92);
+    backdrop-filter:blur(10px);
+    padding:14px 40px;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .logo{
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size:1.35rem;
+    letter-spacing:0.06em;
+  }
+  .logo span{color:var(--red-bright);}
+  nav ul{list-style:none; display:flex; gap:36px;}
+  nav a{
+    font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-muted); position:relative; padding-bottom:4px;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--red-bright); transition:width .3s ease;
+  }
+  nav a:hover, nav a:focus-visible{color:var(--text);}
+  nav a:hover::after, nav a:focus-visible::after{width:100%;}
+  .call-btn{
+    border:1px solid var(--red-deep);
+    color:var(--text);
+    padding:9px 20px;
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    border-radius:2px;
+    transition:background .3s ease, border-color .3s ease;
+    white-space:nowrap;
+  }
+  .call-btn:hover{background:var(--red); border-color:var(--red);}
+  .menu-toggle{display:none; background:none; border:none; color:var(--text); font-size:1.6rem; cursor:pointer;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    isolation:isolate;
+  }
+  .hero-bg{
+    position:absolute; inset:0; z-index:-2;
+    background-image:url('https://picsum.photos/seed/taarof-hero-9/1800/1200');
+    background-size:cover; background-position:center;
+    filter:grayscale(75%) contrast(1.15) brightness(0.55);
+    transform:scale(1.06);
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(ellipse at center, rgba(10,8,8,0.35) 0%, rgba(10,8,8,0.88) 78%),
+      linear-gradient(180deg, rgba(10,8,8,0.55) 0%, rgba(10,8,8,0.3) 30%, rgba(10,8,8,0.75) 100%),
+      linear-gradient(0deg, var(--red-deep) -60%, transparent 40%);
+      mix-blend-mode:normal;
+  }
+  .hero-content{max-width:780px; padding:0 24px;}
+  .hero-content .eyebrow{display:block; margin-bottom:22px;}
+  .hero-content h1{
+    font-size:clamp(3rem, 9vw, 6.4rem);
+    font-weight:900;
+    line-height:0.98;
+    letter-spacing:0.01em;
+    text-transform:uppercase;
+    color:var(--text);
+    text-shadow:0 10px 40px rgba(0,0,0,0.6);
+  }
+  .hero-content h1 em{
+    font-style:normal;
+    color:var(--red-bright);
+  }
+  .hero-content .tagline{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--text-muted);
+    margin:26px 0 40px;
+  }
+  .hero-cta{display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+  .btn{
+    display:inline-block;
+    padding:15px 34px;
+    font-size:0.82rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    border-radius:2px;
+    transition:all .3s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--red); color:#fff;}
+  .btn-primary:hover{background:var(--red-bright); transform:translateY(-2px); box-shadow:0 12px 30px rgba(200,29,58,0.35);}
+  .btn-ghost{border-color:rgba(243,236,228,0.4); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text); background:rgba(243,236,228,0.06);}
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    width:1px; height:52px; background:linear-gradient(var(--red-bright), transparent);
+    animation:scrollcue 2s ease-in-out infinite;
+  }
+  @keyframes scrollcue{0%{opacity:0; transform:translate(-50%,-8px);}50%{opacity:1;}100%{opacity:0; transform:translate(-50%,10px);}}
+
+  section{padding:120px 0;}
+  .section-head{text-align:center; margin-bottom:64px;}
+  .section-head h2{font-size:clamp(2.1rem,4vw,3rem); font-weight:700; margin-top:14px;}
+  .section-head p{color:var(--text-muted); max-width:520px; margin:16px auto 0; font-size:0.98rem; line-height:1.7;}
+
+  /* ---------- About ---------- */
+  .about{background:var(--bg-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;}
+  .about-text .eyebrow{margin-bottom:16px; display:block;}
+  .about-text h2{font-size:clamp(2rem,3.6vw,2.8rem); line-height:1.15; margin-bottom:22px;}
+  .about-text p{color:var(--text-muted); line-height:1.85; margin-bottom:18px; font-size:1rem;}
+  .stat-row{display:flex; gap:36px; margin-top:36px; flex-wrap:wrap;}
+  .stat b{display:block; font-family:'Playfair Display',serif; font-size:2.1rem; color:var(--red-bright);}
+  .stat span{font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted);}
+  .about-photo{position:relative; aspect-ratio:4/5; border-radius:3px; overflow:hidden; border:1px solid var(--line);}
+  .about-photo img{width:100%; height:100%; object-fit:cover; filter:grayscale(55%) contrast(1.1) brightness(0.85);}
+  .about-photo::after{content:''; position:absolute; inset:0; background:linear-gradient(160deg, rgba(200,29,58,0.28), rgba(10,8,8,0.55));}
+  .hours-card{
+    position:absolute; bottom:-1px; right:-1px;
+    background:var(--red); color:#fff;
+    padding:22px 26px; font-size:0.85rem; line-height:1.9;
+    border-top-left-radius:4px;
+  }
+  .hours-card b{display:block; font-family:'Playfair Display',serif; font-size:1rem; margin-bottom:6px;}
+
+  /* ---------- Menu ---------- */
+  .menu-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0 80px;}
+  .menu-cat{margin-bottom:56px;}
+  .menu-cat h3{
+    font-size:1.15rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--red-bright); font-weight:600; margin-bottom:26px;
+    padding-bottom:12px; border-bottom:1px solid var(--line);
+  }
+  .menu-item{display:flex; justify-content:space-between; gap:16px; margin-bottom:22px;}
+  .menu-item .name{font-family:'Playfair Display',serif; font-size:1.08rem; font-weight:500;}
+  .menu-item .desc{color:var(--text-muted); font-size:0.85rem; margin-top:4px; line-height:1.5;}
+  .menu-item .price{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem; color:var(--red-bright); white-space:nowrap; padding-top:2px;}
+  .menu-note{
+    text-align:center; margin-top:10px; color:var(--text-muted);
+    font-size:0.85rem; font-style:italic; font-family:'Cormorant Garamond',serif;
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery{background:var(--bg-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:180px 180px;
+    gap:12px;
+  }
+  .gallery-grid .g1{grid-column:span 2; grid-row:span 2;}
+  .gallery-grid .g4{grid-column:span 2;}
+  .g-item{position:relative; overflow:hidden; border-radius:2px;}
+  .g-item img{width:100%; height:100%; object-fit:cover; filter:grayscale(60%) contrast(1.1) brightness(0.75); transition:transform .6s ease, filter .6s ease;}
+  .g-item::after{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(200,29,58,0.55), transparent 60%); opacity:0; transition:opacity .4s ease;}
+  .g-item span{
+    position:absolute; left:16px; bottom:14px; z-index:2; font-size:0.78rem;
+    letter-spacing:0.08em; text-transform:uppercase; opacity:0; transition:opacity .4s ease;
+  }
+  .g-item:hover img{transform:scale(1.08); filter:grayscale(20%) contrast(1.1) brightness(0.9);}
+  .g-item:hover::after, .g-item:hover span{opacity:1;}
+
+  /* ---------- Contact ---------- */
+  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px;}
+  .info-block{margin-bottom:30px;}
+  .info-block .eyebrow{display:block; margin-bottom:8px;}
+  .info-block p, .info-block a.plain{color:var(--text); font-size:1.05rem; line-height:1.7;}
+  .info-block p.muted{color:var(--text-muted); font-size:0.92rem;}
+  .map-btn{
+    margin-top:10px; display:inline-flex; align-items:center; gap:8px;
+    color:var(--red-bright); font-size:0.85rem; letter-spacing:0.05em; border-bottom:1px solid var(--red-deep); padding-bottom:2px;
+  }
+  form{background:var(--panel); border:1px solid var(--line); padding:44px; border-radius:3px;}
+  .field{margin-bottom:22px;}
+  .field label{display:block; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;}
+  .field input, .field textarea{
+    width:100%; background:transparent; border:none; border-bottom:1px solid var(--line);
+    color:var(--text); font-family:'Jost',sans-serif; font-size:1rem; padding:10px 2px; resize:none;
+  }
+  .field input:focus, .field textarea:focus{outline:none; border-bottom-color:var(--red-bright);}
+  .field textarea{min-height:100px;}
+  form .btn-primary{width:100%; border:none; cursor:pointer; margin-top:6px;}
+  .form-msg{margin-top:14px; font-size:0.85rem; color:var(--red-bright); display:none; text-align:center;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:50px 0 30px; border-top:1px solid var(--line);}
+  .footer-grid{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
+  footer .logo{font-size:1.1rem;}
+  footer .fine{color:var(--text-muted); font-size:0.78rem; letter-spacing:0.03em;}
+  .socials{display:flex; gap:18px;}
+  .socials a{width:36px; height:36px; border:1px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:border-color .3s, color .3s;}
+  .socials a:hover{border-color:var(--red-bright); color:var(--red-bright);}
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .about-grid, .contact-grid{grid-template-columns:1fr; gap:50px;}
+    .menu-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(3,160px);}
+    .gallery-grid .g1{grid-column:span 2; grid-row:span 1;}
+    .gallery-grid .g4{grid-column:span 1;}
+    nav ul{display:none;}
+    .menu-toggle{display:block;}
+    .call-btn{display:none;}
+  }
+  @media (max-width:520px){
+    section{padding:80px 0;}
+    .wrap{padding:0 22px;}
+    form{padding:28px;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="logo">TAA<span>ROF</span></div>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <a class="call-btn" href="tel:+919682163184">+91 96821 63184</a>
+  <button class="menu-toggle" aria-label="Menu">&#9776;</button>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Sopore · Kashmir</span>
+    <h1>Taarof <em>Cafe</em></h1>
+    <p class="tagline">Hospitality served warm — softies, shakes &amp; flavour, done with quiet luxury.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn btn-primary">View Menu</a>
+      <a href="#contact" class="btn btn-ghost">Reserve a Table</a>
+    </div>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-text reveal">
+      <span class="eyebrow">Our Story</span>
+      <h2>An everyday ritual, made a little more special.</h2>
+      <p>Tucked into the Main Chowk of Tawheed Bagh, Taarof Cafe has become Sopore's go-to spot for a quiet coffee, a celebratory shake, or a plate shared with people you like. "Taarof" — the art of gracious hospitality — is the whole idea: warm service, clean spaces, and food made with care.</p>
+      <p>Guests keep coming back for the softy, the dry-fruit shake, and a team that treats every table like it matters.</p>
+      <div class="stat-row">
+        <div class="stat"><b>4.4★</b><span>166 Google Reviews</span></div>
+        <div class="stat"><b>9AM–8:30PM</b><span>Open Daily</span></div>
+        <div class="stat"><b>Est. Local</b><span>Sopore Favourite</span></div>
+      </div>
+    </div>
+    <div class="about-photo reveal">
+      <img src="https://picsum.photos/seed/taarof-about-3/900/1100" alt="Cafe ambience">
+      <div class="hours-card">
+        <b>Open Today</b>
+        9:00 AM – 8:30 PM
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="divider">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2c3 3 3 7 0 10-3-3-3-7 0-10z"/><path d="M12 12c4 1 6 4 6 8-4 0-7-2-8-6"/><path d="M12 12c-4 1-6 4-6 8 4 0 7-2 8-6"/></svg>
+        <span class="line right"></span>
+      </div>
+      <span class="eyebrow">What We Serve</span>
+      <h2>The Menu</h2>
+      <p>A guest favourites selection — softies, shakes, coffee and bites. Ask our team about seasonal specials.</p>
+    </div>
+
+    <div class="menu-grid">
+      <div>
+        <div class="menu-cat reveal">
+          <h3>Softies &amp; Ice Cream</h3>
+          <div class="menu-item"><div><div class="name">Classic Softy</div><div class="desc">Creamy, smooth-swirled soft serve</div></div><div class="price">₹60</div></div>
+          <div class="menu-item"><div><div class="name">Choco Dip Softy</div><div class="desc">Classic softy, hand-dipped in chocolate</div></div><div class="price">₹90</div></div>
+          <div class="menu-item"><div><div class="name">Kashmiri Kesar Softy</div><div class="desc">Saffron-infused soft serve, pistachio crumble</div></div><div class="price">₹110</div></div>
+        </div>
+        <div class="menu-cat reveal">
+          <h3>Shakes</h3>
+          <div class="menu-item"><div><div class="name">Dry Fruit Shake</div><div class="desc">The house signature — almond, cashew, pistachio</div></div><div class="price">₹150</div></div>
+          <div class="menu-item"><div><div class="name">Belgian Chocolate Shake</div><div class="desc">Rich cocoa, whipped cream</div></div><div class="price">₹140</div></div>
+          <div class="menu-item"><div><div class="name">Seasonal Fruit Shake</div><div class="desc">Fresh fruit, made to order</div></div><div class="price">₹120</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="menu-cat reveal">
+          <h3>Coffee &amp; Beverages</h3>
+          <div class="menu-item"><div><div class="name">Signature Kahwa</div><div class="desc">Traditional Kashmiri kahwa, saffron &amp; almonds</div></div><div class="price">₹70</div></div>
+          <div class="menu-item"><div><div class="name">Cold Coffee</div><div class="desc">Espresso, cold milk, ice-blended</div></div><div class="price">₹110</div></div>
+          <div class="menu-item"><div><div class="name">Cappuccino</div><div class="desc">Double shot, steamed milk foam</div></div><div class="price">₹100</div></div>
+        </div>
+        <div class="menu-cat reveal">
+          <h3>Bites</h3>
+          <div class="menu-item"><div><div class="name">Loaded Fries</div><div class="desc">Cheese, house sauce, herbs</div></div><div class="price">₹130</div></div>
+          <div class="menu-item"><div><div class="name">Cafe Sandwich</div><div class="desc">Grilled, served with dip</div></div><div class="price">₹120</div></div>
+          <div class="menu-item"><div><div class="name">Chicken Platter</div><div class="desc">Chef's selection, served fresh</div></div><div class="price">₹220</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="menu-note">Sample menu shown for design purposes — swap in your actual items &amp; prices before publishing.</p>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Inside Taarof</span>
+      <h2>Gallery</h2>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="g-item g1"><img src="https://picsum.photos/seed/taarof-g1/700/900" alt="Cafe interior"><span>Ambience</span></div>
+      <div class="g-item g2"><img src="https://picsum.photos/seed/taarof-g2/500/400" alt="Softy dessert"><span>Softy</span></div>
+      <div class="g-item g3"><img src="https://picsum.photos/seed/taarof-g3/500/400" alt="Shake"><span>Shakes</span></div>
+      <div class="g-item g4"><img src="https://picsum.photos/seed/taarof-g4/900/400" alt="Table setting"><span>Table Setting</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <span class="eyebrow">Get In Touch</span>
+      <h2 style="font-size:clamp(2rem,3.6vw,2.8rem); margin:14px 0 34px;">Contact Us</h2>
+
+      <div class="info-block">
+        <span class="eyebrow">Address</span>
+        <p>Main Chowk, Tawheed Bagh,<br>Sopore, Jammu &amp; Kashmir 193201</p>
+        <a class="map-btn" href="https://maps.app.goo.gl/2HEsJHMX6SuD1GAz9?g_st=ac" target="_blank" rel="noopener">Open in Google Maps →</a>
+      </div>
+      <div class="info-block">
+        <span class="eyebrow">Phone</span>
+        <p><a class="plain" href="tel:+919682163184">+91 96821 63184</a></p>
+      </div>
+      <div class="info-block">
+        <span class="eyebrow">Hours</span>
+        <p class="muted">Mon – Sun: 9:00 AM – 8:30 PM</p>
+      </div>
+    </div>
+
+    <form id="contactForm" class="reveal">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" required placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" required placeholder="Your number">
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Table for two, this evening..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Enquiry</button>
+      <p class="form-msg" id="formMsg">Thanks — we'll get back to you shortly.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="logo">TAA<span>ROF</span></div>
+    <p class="fine">© 2026 Taarof Cafe, Sopore. All rights reserved.</p>
+    <div class="socials">
+      <a href="tel:+919682163184" aria-label="Call">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </a>
+      <a href="https://maps.app.goo.gl/2HEsJHMX6SuD1GAz9?g_st=ac" target="_blank" rel="noopener" aria-label="Map">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  const form = document.getElementById('contactForm');
+  const msg = document.getElementById('formMsg');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    msg.style.display = 'block';
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
